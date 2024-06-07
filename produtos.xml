@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfProduct xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Product>
+    <name>arroz</name>
+    <price>35</price>
+    <category>alimento</category>
+    <stock>200</stock>
+    <stockMin>40</stockMin>
+    <code>1010</code>
+  </Product>
+  <Product>
+    <name>feijao</name>
+    <price>12</price>
+    <category>alimento</category>
+    <stock>270</stock>
+    <stockMin>30</stockMin>
+    <code>2020</code>
+  </Product>
+</ArrayOfProduct>

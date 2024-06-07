@@ -24,20 +24,20 @@ class Controller
             switch (choice)
             {
                 case 1:
-                    view.Header("Adicionar um novo produto");
+                    view.Header("Cadastrar novo produto");
                     code = view.CodeInput();
                     if(repository.checkProductAlreadyRegistered(code)){
-                        view.Message("Produto já foi cadastrado.");
-                        view.ReturnMessage(repository.AddProduct(view.UpdateStock(code))); 
+                        view.ReturnMessage("Id já foi cadastrado para outro produto.");
                     }else{
                         view.ReturnMessage(repository.AddProduct(view.ProductRegistration(code))); 
                     }
-                    break;
+                break;
+
                 case 2:
-                    view.Header("Excluir um produto existente");
+                    view.Header("Excluir produto");
                     code = view.CodeInput();
                     view.ReturnMessage(repository.RemoveProduct(code));
-                    break;
+                break;
 
                 case 3:
                     view.Header("Atualizar o produto");
@@ -47,47 +47,83 @@ class Controller
                     }else{
                         view.ReturnMessage("Produto não encontrado!");
                     }
-                    break;
+                break;
 
                 case 4:
-                    view.Header("Visualizar todos os produtos");
-                    view.AllProducts(repository.GetAllProduct());
-                    break;
+                    view.Header("Adicionar no estoque");
+                    code = view.CodeInput();
+                    if(repository.checkProductAlreadyRegistered(code)){
+                        view.ShowProduct(repository.GetProduct(code));
+                        view.ReturnMessage(repository.IncreaseStock(view.InputStock(code)));   
+                    }else{
+                         view.ReturnMessage("Produto não encontrado!");
+                    }
+                break;
 
                 case 5:
-                    view.Header("Visualizar os produtos por categoria");
-                    System.Console.WriteLine("Está faltando");
-                    break;
-
+                    view.Header("Remover do estoque");
+                    code = view.CodeInput();
+                    if(repository.checkProductAlreadyRegistered(code)){
+                        view.ShowProduct(repository.GetProduct(code));
+                        view.ReturnMessage(repository.DecrementStock(view.InputStock(code)));   
+                    }else{
+                         view.ReturnMessage("Produto não encontrado!");
+                    }
+                break;
+                
                 case 6:
-                    view.Header("Visualizar os produtos pelo nome");
-                    System.Console.WriteLine("Está faltando");
-                    break;
+                    view.Header("Procurar por um produto");
+                    code = view.CodeInput();
+                    if(repository.checkProductAlreadyRegistered(code)){
+                         view.ShowProduct(repository.GetProduct(code));
+                    }else{
+                         view.ReturnMessage("Produto não encontrado!");
+                    }
+                break;
 
                 case 7:
-                    view.Header("Visualizar os produtos pelo nome");
-                    System.Console.WriteLine("Está faltando");
-                    break;
+                    view.Header("Visualizar todos os produtos");
+                    view.AllProducts(repository.GetAllProduct());
+                break;
 
                 case 8:
                     view.Header("Visualizar os produtos pelo nome");
                     System.Console.WriteLine("Está faltando");
-                    break;
+                break;
+
                 case 9:
-                    view.Header("Carregar arquivo salvo");
+                    view.Header("Visualizar os produtos pelo preço");
                     System.Console.WriteLine("Está faltando");
-                    break;
+                break;
+                
                 case 10:
-                    view.Header("Salvar arquivo");
+                    view.Header("Visualizar os produtos por categoria");
                     System.Console.WriteLine("Está faltando");
-                    break;
+                break;
+                
                 case 11:
+                    view.Header("Visualizar os produtos com estoque baixo");
+                    System.Console.WriteLine("Está faltando");
+                break;
+                
+                case 12:
+                    view.Header("Salvar arquivo");
+                    view.ReturnMessage(repository.SaveFile());
+                break;
+                
+                case 13:
+                    view.Header("Carregar arquivo salvo");
+                    view.ReturnMessage(repository.LoadFile());
+                break;
+                
+                case 14:
                     view.ShowGoodBye();
-                    break;
+                    return;
+                
                 default:
                     view.Message("Erro no sistema!");
                     return;
             }
-        }while(choice != 11);
+        }while(true);
     }
 }

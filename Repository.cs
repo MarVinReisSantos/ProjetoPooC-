@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
-class Repository
+using System.Xml.Serialization;
+using System.IO;
+public class Repository
 {
     private List<Product> productList = new List<Product>();
     public Repository(){
@@ -27,6 +28,40 @@ class Repository
             }
         }catch{
             return "Erro ao cadastrar novo produto!";
+        }
+    }
+
+    public string IncreaseStock(Product product){
+        var produto = productList.FirstOrDefault(p => p.code == product.code);
+
+        try{
+            if (produto != null){
+                produto.stock += product.stock;
+                return "Estoque incrementado com sucesso!";
+            }
+            return "Erro ao incrementar o estoque!";
+            
+        }catch{
+            return "Erro ao incrementar o estoque!";
+        }
+    }
+    public string DecrementStock(Product product){
+        var produto = productList.FirstOrDefault(p => p.code == product.code);
+
+        try{
+            if (produto != null)
+            {
+                if((produto.stock-product.stock) >= 0){
+                    produto.stock -= product.stock;
+                    return "Estoque decrementado com sucesso!";
+                }
+
+                return $"Não tem no estoque {product.stock} {GetProduct(product.code).name}";
+            }else{
+                return "Erro ao incrementar o estoque!";
+            }
+        }catch{
+            return "Erro ao incrementar o estoque!";
         }
     }
     public string UpdateProduct(Product product){
@@ -57,6 +92,14 @@ class Repository
         
         return false;
     }
+    public Product GetProduct(int code){
+        var produto = productList.FirstOrDefault(p => p.code == code);
+
+        if (produto != null)
+            return produto;
+        
+        return produto;
+    }
     public string RemoveProduct(int code){
         var produto = productList.FirstOrDefault(p => p.code == code);
 
@@ -73,5 +116,34 @@ class Repository
     }
     public List<Product> GetAllProduct(){
         return productList;
+    }
+    public string SaveFile(){
+        XmlSerializer serializer = new XmlSerializer(typeof(List<Product>));
+
+        try{
+            using (TextWriter writer = new StreamWriter("produtos.xml")){
+                serializer.Serialize(writer, productList);
+            }
+            return "Arquivo Salvo com sucesso.";
+        }catch{
+            return "Erro ao salvar o arquivo.";
+        }
+    }
+    public string LoadFile(){
+        XmlSerializer serializer = new XmlSerializer(typeof(List<Product>));
+
+        try{
+            using (TextReader reader = new StreamReader("produtos.xml")){
+                List<Product> deserializedPeople = (List<Product>)serializer.Deserialize(reader);
+
+                foreach (var person in deserializedPeople)
+                {
+                    AddProduct(person);
+                }
+            }
+        }catch{
+            return "Erro ao carregar o arquivo.";
+        }
+        return "Erro ao carregar o arquivo.";
     }
 }
